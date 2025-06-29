@@ -1,4 +1,4 @@
-import { Page } from "@/Page";
+import { Page, PageSpec } from "@/Page";
 import { allPages } from "@/routes";
 import fs from "node:fs/promises";
 import { join as joinPath, dirname, resolve as resolvePath } from "node:path";
@@ -18,15 +18,18 @@ async function build() {
 
   const template = await fs.readFile(resolvePath("./dist/index.html"), "utf8");
 
-  for (const { path, spec } of allPages()) {
-    const appHtml = renderToString(Page({ spec }));
-    // Assert that spec is JSON serializable
-    if (!dequal(spec, JSON.parse(JSON.stringify(spec)))) {
+  for (const { path, spec: rawSpec } of allPages()) {
+    const jsonString = JSON.stringify(rawSpec);
+
+    // Ensure spec is valid after JSON serialization
+    const jsonParsedSpec = JSON.parse(jsonString);
+    const spec = PageSpec.parse(jsonParsedSpec);
+    if (!dequal(spec, rawSpec)) {
       console.error(spec);
       throw new Error(`Page spec for ${path} is not JSON serializable`);
     }
-    const jsonString = JSON.stringify(spec);
 
+    const appHtml = renderToString(Page({ spec }));
     const html = template
       .replace('<div id="root">', `<div id="root">${appHtml}`)
       .replace(
