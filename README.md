@@ -1,5 +1,11 @@
 # SSG with Vite and React -- a proof of concept
 
+```
+npm run dev
+# OR
+npm run build && npx serve dist
+``
+
 To generate static pages from pages that use React, here's the mental model I've
 found helpful:
 

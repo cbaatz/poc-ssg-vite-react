@@ -13,7 +13,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@sentry/react": "9.31.0",
     "react": "19.1.0",
     "react-dom": "19.1.0"
   },

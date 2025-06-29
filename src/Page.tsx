@@ -1,4 +1,3 @@
-import { captureException } from "@sentry/react";
 import { type ReactElement, useState } from "react";
 import { z } from "zod/v4";
 
@@ -23,7 +22,6 @@ function Page({ spec }: { spec: PageSpec }): ReactElement {
   if (spec.type === "blog") return <BlogPage spec={spec} />;
   if (spec.type === "cms") return <CmsPage spec={spec} />;
   const __exhaustive: never = spec;
-  captureException(new Error(`Unknown page type: ${spec}`));
   return <div>Error: Unknown page type</div>;
 }
 
@@ -50,14 +48,6 @@ function CmsPage({ spec }: { spec: CmsSpec }): ReactElement {
       <p>Count: {count}</p>
       <button type="button" onClick={() => setCount((count) => count + 1)}>
         Increment me
-      </button>
-      <button
-        type="button"
-        onClick={() => {
-          throw new Error("This is your first error!");
-        }}
-      >
-        Break the world (Sentry test)
       </button>
       <pre className="bg-gray-100 p-4 rounded">
         <code>{JSON.stringify(data, null, 2)}</code>
