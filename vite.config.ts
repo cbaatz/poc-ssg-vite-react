@@ -50,6 +50,7 @@ export default defineConfig({
         manualChunks(id) {
           if (id.includes("node_modules/react")) return "vendor";
           if (id.includes("node_modules/react-dom")) return "vendor";
+          if (id.includes("node_modules/zod")) return "vendor";
         },
       },
     },
